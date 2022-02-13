@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <title>WordZen</title>
+    
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/sidebars.css" rel="stylesheet">
+    <link href="./css/custom.css" rel="stylesheet">
+    <script src="./js/bootstrap.bundle.min.js" defer></script>
+    <script src="./js/handler.js" defer></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  </head>
+<body>
+  <header class="navbar navbar-light sticky-top bg-light flex-md-nowrap p-0 border-bottom">
+    <img class="bi me-2 ps-3" style="height:8vh;" src="./img/WordZen-tsp.png" alt="">
+    <div class="navbar-nav">
+      <div class="nav-item text-nowrap">
+        <a class="nav-link px-3" href="#">Help</a>
+      </div>
+    </div>
+  </header>
+  <main x-data="handler()">
+    <div id="sidebar" class="flex-shrink-0 p-3 bg-white">
+      <ul class="list-unstyled ps-0">
+        <label class="ms-3 fw-bold fs-5 rounded">Mode</label>
+        <li class="border-top my-2"></li>
+        <li class="mb-1">
+          <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#phrases-collapse" aria-expanded="false">
+            Phrases
+          </button>
+          <div class="collapse" id="phrases-collapse">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+              <li><btn @click="activateProcess('Similar Phrases', 'Phrases')" class="link-dark rounded">Similar Phases</btn></li>
+              <li><btn @click="activateProcess('Commonly Used Adjectives', 'Phrases')" class="link-dark rounded">Commonly Used Adjectives</btn></li>
+            </ul>
+          </div>
+        </li>
+        <li class="mb-1">
+          <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#words-collapse" aria-expanded="false">
+            Word
+          </button>
+          <div class="collapse" id="words-collapse">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+              <li><btn @click="activateProcess('Commonly Following Words', 'Word')" class="link-dark rounded">Commonly Following Words</btn></li>
+              <li><btn @click="activateProcess('Relevant Image', 'Word')" class="link-dark rounded">Relevant Image</btn></li>
+
+            </ul>
+          </div>
+        </li>
+        <li class="mb-1">
+          <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#paragraphs-collapse" aria-expanded="false">
+            Paragraph
+          </button>
+          <div class="collapse" id="paragraphs-collapse">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+              <li><btn @click="activateProcess('Translate Text', 'Paragraph')" class="link-dark rounded">Translate Text</btn></li>
+            </ul>
+          </div>
+        </li>
+        <li class="border-top my-2"></li>
+      </ul>
+    </div>
+    <div class="site-divider"></div>
+    <div id="primary" class="container ms-sm-auto px-md-4">
+      <div class="row d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2" x-text="'Input Mode | ' + process"></h1>
+      </div>
+      <div class="row d-flex justify-content-center" @keyup="checkInput()">
+        <template x-if="concept == 'Phrases'">
+          <div class="col-md-8">
+            <input x-model="input" type="text" class="form-control mb-3" id="input" placeholder="Lorem ipsum dolor sit amet" required>
+          </div>      
+        </template>
+        <template x-if="concept == 'Word'">
+          <div class="col-md-2">
+            <input x-model="input" type="text" class="form-control mb-3" id="input" placeholder="Lorem" required>
+          </div>
+        </template>
+        <template x-if="concept == 'Paragraph'">
+          <div class="col-md-8">
+            <textarea x-model="input" class="form-control mb-3" id="input" placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean commodo sit amet metus sed euismod. Praesent tincidunt neque eget ante posuere aliquet. Nulla facilisi. Proin dolor velit, rutrum sit amet venenatis nec, bibendum sit amet erat. Cras vestibulum libero eu enim pulvinar, eget suscipit mauris rutrum. Morbi sed lobortis nibh, eget feugiat dui. Nulla mollis egestas ante, quis vestibulum nisi elementum id. Praesent convallis tempor tincidunt. Nulla mi tellus, mattis ut ipsum ut, fermentum consectetur nisi. Integer euismod at ante et rhoncus. Mauris et finibus velit. Aliquam tempus ac ligula quis ultrices. Nullam vestibulum ipsum vestibulum turpis luctus pharetra eu ut nunc. Donec sit amet quam sed purus venenatis molestie." rows="7" required></textarea>
+          </div>
+        </template>
+      </div>
+      <template x-if="concept != ''">
+        <div class="row mb-3">
+          <div class="col d-flex justify-content-end">
+            <button @click="getResult()" type="button" class="btn btn-primary">Submit</button>
+          </div>
+          <div class="col d-flex justify-content-start">
+            <button @click="inactivateProcess()" type="button" class="btn btn-secondary" x-text="clearText"></button>
+          </div>
+        </div>
+      </template>
+      <template x-if="result != ''">
+        <div class="row d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-top border-bottom">
+          <h1 class="h2">Output</h1>
+        </div>
+      </template>
+      <div class="row">
+        <template x-if="result != '' && process == 'Relevant Image'">
+          <div class="col d-flex justify-content-center">
+            <img style="max-width: 80vw;" :src="result" alt="">
+          </div>
+        </template>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
