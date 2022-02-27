@@ -36,7 +36,7 @@ function handler() {
             if(this.input != "") {
                 switch(this.process) {
                     case "Relevant Image": 
-                        this.result = getRelevantImage(this.input);
+                        getRelevantImage(this.input).then(url => this.result = url);
                         break;
                     default:
                         this.result = "Test";
@@ -47,5 +47,17 @@ function handler() {
 }
 
 function getRelevantImage(input) {
-    return "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg";
+    return new Promise(resolve => {
+        fetch(`https://wikimedia-image-scraper.herokuapp.com/get_image_url/?word=${input}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Request failed with status ${reponse.status}`)
+            }
+            return response.json()
+        })
+        .then(data => {
+            resolve(data.IMAGE_URL);
+        })
+        .catch(error => console.log(error))
+    });
 }

@@ -1,3 +1,7 @@
+#primary {
+  overflow-y: scroll;
+}
+
 #sidebar {
   width: 15vw;
 }
