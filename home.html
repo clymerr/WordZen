@@ -18,7 +18,7 @@
     <img class="bi me-2 ps-3" style="height:8vh;" src="./img/WordZen-tsp.png" alt="">
     <div class="navbar-nav">
       <div class="nav-item text-nowrap">
-        <a class="nav-link px-3" href="#">Help</a>
+        <btn class="nav-link px-3" data-bs-toggle="modal" data-bs-target="#exampleModal">Help</btn>
       </div>
     </div>
   </header>
@@ -33,7 +33,7 @@
           </button>
           <div class="collapse" id="phrases-collapse">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-              <li><btn @click="activateProcess('Similar Phrases', 'Phrases')" class="link-dark rounded">Similar Phases</btn></li>
+              <li><btn @click="activateProcess('Similar Concept', 'Phrases')" class="link-dark rounded">Similar Concept</btn></li>
               <li><btn @click="activateProcess('Commonly Used Adjectives', 'Phrases')" class="link-dark rounded">Commonly Used Adjectives</btn></li>
             </ul>
           </div>
@@ -47,16 +47,6 @@
               <li><btn @click="activateProcess('Commonly Following Words', 'Word')" class="link-dark rounded">Commonly Following Words</btn></li>
               <li><btn @click="activateProcess('Relevant Image', 'Word')" class="link-dark rounded">Relevant Image</btn></li>
 
-            </ul>
-          </div>
-        </li>
-        <li class="mb-1">
-          <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#paragraphs-collapse" aria-expanded="false">
-            Paragraph
-          </button>
-          <div class="collapse" id="paragraphs-collapse">
-            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-              <li><btn @click="activateProcess('Translate Text', 'Paragraph')" class="link-dark rounded">Translate Text</btn></li>
             </ul>
           </div>
         </li>
@@ -79,11 +69,6 @@
             <input x-model="input" type="text" class="form-control mb-3" id="input" placeholder="Lorem" required>
           </div>
         </template>
-        <template x-if="concept == 'Paragraph'">
-          <div class="col-md-8">
-            <textarea x-model="input" class="form-control mb-3" id="input" placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean commodo sit amet metus sed euismod. Praesent tincidunt neque eget ante posuere aliquet. Nulla facilisi. Proin dolor velit, rutrum sit amet venenatis nec, bibendum sit amet erat. Cras vestibulum libero eu enim pulvinar, eget suscipit mauris rutrum. Morbi sed lobortis nibh, eget feugiat dui. Nulla mollis egestas ante, quis vestibulum nisi elementum id. Praesent convallis tempor tincidunt. Nulla mi tellus, mattis ut ipsum ut, fermentum consectetur nisi. Integer euismod at ante et rhoncus. Mauris et finibus velit. Aliquam tempus ac ligula quis ultrices. Nullam vestibulum ipsum vestibulum turpis luctus pharetra eu ut nunc. Donec sit amet quam sed purus venenatis molestie." rows="7" required></textarea>
-          </div>
-        </template>
       </div>
       <template x-if="concept != ''">
         <div class="row mb-3">
@@ -95,17 +80,48 @@
           </div>
         </div>
       </template>
-      <template x-if="result != ''">
+      <template x-if="result != '' || resultArr.length > 0">
         <div class="row d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-top border-bottom">
           <h1 class="h2">Output</h1>
         </div>
       </template>
       <div class="row">
-        <template x-if="result != '' && process == 'Relevant Image'">
-          <div class="col d-flex justify-content-center">
+        <div class="col d-flex justify-content-center">
+          <template x-for="value in resultArr">
+            <span x-text="value.word" class="badge bg-dark" style="margin:.25rem"></span>
+          </template>
+          <template x-if="result != '' && process == 'Relevant Image'">
             <img style="max-width: 80vw;" :src="result" alt="">
+          </template>
+        </div>
+      </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Help</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-        </template>
+          <div class="modal-body">
+            <template x-if="process == 'None'">
+              <p>Select a Mode with Phrases or Words to get help in formulating language or visuals from text.</p>
+            </template>
+            <template x-if="process == 'Similar Concept'">
+              <p>Enter a Phrase to be returned Words representative of the conceptual representation of your input.</p>
+            </template>
+            <template x-if="process == 'Commonly Used Adjectives'">
+              <p>Enter a Phrase to be returned Words that are commonly used as adjectives describing your input.</p>
+            </template>
+            <template x-if="process == 'Commonly Following Words'">
+              <p>Enter a Word to be returned Words that commonly follow your input in a sentence.</p>
+            </template>
+            <template x-if="process == 'Relevant Image'">
+              <p>Enter a Word to be returned a relevant image representation of the concept.</p>
+            </template>
+          </div>
+        </div>
       </div>
     </div>
   </main>

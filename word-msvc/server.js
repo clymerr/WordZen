@@ -4,7 +4,8 @@ let app = express();
 app.set('port', 4758);
 
 const https = require('https')
-
+var cors = require('cors')
+app.use(cors())
 
 app.get('/phrases', function(req, res, next) {
   callDatamuse(req.query.mode, req.query.input).then((result) => {
